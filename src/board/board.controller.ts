@@ -28,8 +28,8 @@ export class BoardController {
   }
 
   /**
-   * ValidationPipe({ transform: true }) 적용
-   * - 요청 body → DTO 변환 + 유효성 검증 (실패 시 400)
+   * - transform: true
+   *    - plain object → DTO 인스턴스 변환
    */
   @Post('/')
   createBoard(
@@ -38,6 +38,10 @@ export class BoardController {
     return this.boardService.createBoard(newBoardReq);
   }
 
+  /**
+   * - skipMissingProperties: true
+   *    - 바디 내부에 없는 키값은 검증 스킵
+   */
   @Patch('/:id')
   updateBoardById(
     @Param('id', ParseUUIDPipe) id: string,
