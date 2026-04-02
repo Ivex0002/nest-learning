@@ -1,7 +1,18 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { BoardValidate } from '../board.model';
-import { ValidateNested } from 'class-validator';
+import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { BoardStatus } from '../board.entity';
+
+class BoardPayload {
+  @IsNotEmpty()
+  title: string;
+
+  @IsNotEmpty()
+  description: string;
+
+  @IsEnum(BoardStatus)
+  status: BoardStatus;
+}
 
 /**
  * 단순 crud 객체에는 과한 관리 (no flat)
@@ -14,8 +25,8 @@ import { Type } from 'class-transformer';
  */
 export class CreateBoardDto {
   @ValidateNested()
-  @Type(() => BoardValidate)
-  board: BoardValidate;
+  @Type(() => BoardPayload)
+  board: BoardPayload;
 }
 
 /**
@@ -23,10 +34,10 @@ export class CreateBoardDto {
  *
  * CreateBoardDto 와 같은 로직(Partial)
  */
-class UpdateBoardPayload extends PartialType(BoardValidate) {}
+class UpdateBoardPayload extends PartialType(BoardPayload) {}
 
 export class UpdateBoardDto {
   @ValidateNested()
   @Type(() => UpdateBoardPayload)
-  board?: UpdateBoardPayload;
+  board: UpdateBoardPayload;
 }

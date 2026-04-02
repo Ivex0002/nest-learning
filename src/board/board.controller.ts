@@ -4,14 +4,14 @@ import {
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
+  ParseIntPipe,
   Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { Board } from './board.model';
+import { Board } from './board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { ClgCheckPipe } from './pipe/clg-check.pipe';
 
@@ -20,13 +20,13 @@ export class BoardController {
   constructor(private boardService: BoardService) {}
 
   @Get('/')
-  getAllBoards(): Board[] {
+  getAllBoards(): Promise<Board[]> {
     return this.boardService.getAllBoards();
   }
 
   @Get('/:id')
   @UsePipes(ClgCheckPipe)
-  getBoardById(@Param('id', ParseUUIDPipe) id: string): Board {
+  getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
     return this.boardService.getBoardById(id);
   }
 
@@ -37,7 +37,7 @@ export class BoardController {
   @Post('/')
   createBoard(
     @Body(new ValidationPipe({ transform: true })) newBoardReq: CreateBoardDto,
-  ): Board {
+  ): Promise<Board> {
     return this.boardService.createBoard(newBoardReq);
   }
 
@@ -53,7 +53,7 @@ export class BoardController {
    */
   @Patch('/:id')
   updateBoardById(
-    @Param('id', ParseUUIDPipe) id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body(
       new ValidationPipe({
         transform: true,
@@ -61,12 +61,12 @@ export class BoardController {
       }),
     )
     board: UpdateBoardDto,
-  ): Board {
+  ): Promise<Board> {
     return this.boardService.updateBoardById(id, board);
   }
 
   @Delete('/:id')
-  deleteBoardById(@Param('id', ParseUUIDPipe) id: string): string {
+  deleteBoardById(@Param('id', ParseIntPipe) id: number): Promise<string> {
     return this.boardService.deleteBoardById(id);
   }
 }
