@@ -6,6 +6,9 @@ import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+// TODO
+// 단일 데이터베이스, 다중 서비스 상황에 대응하기 위해
+// 커스텀 레파지토리로 분리 후 각 메서드들 정의하기
 @Injectable()
 export class BoardService {
   constructor(
