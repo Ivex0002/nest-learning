@@ -5,10 +5,12 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
 @Entity()
+@Unique(['userName'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
