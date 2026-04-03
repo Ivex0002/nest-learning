@@ -1,4 +1,12 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateAuthDto } from './create-auth.dto';
+import { UserPayload } from './auth-credentials.dto';
+import { ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
-export class UpdateAuthDto extends PartialType(CreateAuthDto) {}
+class UpdateUserPayload extends PartialType(UserPayload) {}
+
+export class UpdateUserDto {
+  @ValidateNested()
+  @Type(() => UpdateUserPayload)
+  user: UpdateUserPayload;
+}
