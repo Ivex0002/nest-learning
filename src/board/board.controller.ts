@@ -25,6 +25,7 @@ export class BoardController {
   }
 
   @Get('/:id')
+  // 체킹용 커스텀 파이프
   @UsePipes(ClgCheckPipe)
   getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
     return this.boardService.getBoardById(id);

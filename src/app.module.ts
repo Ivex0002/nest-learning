@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { BoardModule } from './board/board.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './configs/typeorm.config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   // 가져오기
-  imports: [TypeOrmModule.forRoot(typeORMConfig), BoardModule],
+  imports: [TypeOrmModule.forRoot(typeORMConfig), BoardModule, AuthModule],
   // 내보내기
   exports: [],
   // 엔드포인트

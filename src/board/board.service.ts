@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 // board.model 에서 board.entity 으로 변경
 // 해당 서비스에서는 board.entity만으로 구현하는 것이 간편
 import { Board } from './board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { BoardRepository } from './board.repository';
 
 // TODO
 // 단일 데이터베이스, 다중 서비스 상황에 대응하기 위해
@@ -12,20 +11,20 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class BoardService {
   constructor(
-    @InjectRepository(Board)
-    private boardRepository: Repository<Board>,
+    // 커스텀 레포를 사용하지 않고 직접 서비스에서 구현할때
+    // @InjectRepository(Board)
+    // private boardRepository: Repository<Board>,
+
+    // 커스텀 레포 주입
+    private boardRepository: BoardRepository,
   ) {}
 
   async getAllBoards(): Promise<Board[]> {
-    return await this.boardRepository.find();
+    return await this.boardRepository.getAllBoards();
   }
 
   async getBoardById(id: number): Promise<Board> {
-    const found = await this.boardRepository.findOne({ where: { id } });
-    if (!found) {
-      throw new NotFoundException(`Board with ID [ ${id} ] not found`);
-    }
-    return found;
+    return await this.boardRepository.getBoardById(id);
   }
 
   /**
@@ -35,9 +34,7 @@ export class BoardService {
    * - save 메서드를 통해 최종적으로 db에 저장
    */
   async createBoard(newBoardReq: CreateBoardDto): Promise<Board> {
-    const board = this.boardRepository.create(newBoardReq.board);
-
-    return await this.boardRepository.save(board);
+    return await this.boardRepository.createBoard(newBoardReq);
   }
 
   /**
@@ -51,18 +48,12 @@ export class BoardService {
    */
   async updateBoardById(
     id: number,
-    updatePayload: UpdateBoardDto,
+    updateBoardPayload: UpdateBoardDto,
   ): Promise<Board> {
-    const board = await this.getBoardById(id);
-    Object.assign(board, updatePayload.board);
-    return await this.boardRepository.save(board);
+    return await this.boardRepository.updateBoardById(id, updateBoardPayload);
   }
 
   async deleteBoardById(id: number): Promise<string> {
-    const result = await this.boardRepository.delete(id);
-    if (result.affected === 0) {
-      throw new NotFoundException(`Board with ID [ ${id} ] not found`);
-    }
-    return `Board with ID [ ${id} ] is deleted`;
+    return await this.boardRepository.deleteBoardById(id);
   }
 }

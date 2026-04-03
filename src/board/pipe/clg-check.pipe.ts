@@ -16,7 +16,7 @@ export class ClgCheckPipe implements PipeTransform {
 
 // /**
 //  * 강의에서 한 것
-//  * 현 코드는 isEnum으로 status 유효성 검사 중
+//  * 현 프로젝트는 isEnum으로 status 유효성 검사 중
 //  */
 // export class BoardStatusValidationPipe implements PipeTransform {
 //   readonly StatusOptions = [BoardStatus.PRIVATE, BoardStatus.PUBLIC];
