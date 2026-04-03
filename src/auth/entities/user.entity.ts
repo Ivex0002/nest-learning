@@ -19,14 +19,18 @@ export class User extends BaseEntity {
   userName: string;
 
   @Column()
+  // @Column({ select: false })
   password: string;
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    if (this.password) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
+    // 패스워드 수정이 아니면 스킵
+    if (!this.password) return;
+    // 이미 해시된 경우 스킵
+    if (this.password.startsWith('$2')) return;
+
+    this.password = await bcrypt.hash(this.password, 10);
   }
 
   async validatePassword(rawPassword: string): Promise<boolean> {
