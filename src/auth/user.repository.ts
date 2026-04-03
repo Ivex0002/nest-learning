@@ -2,12 +2,19 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import * as bcrypt from 'bcryptjs';
 
-const EXIST_NAME_MSG = ' already exist userName';
+const MSG = {
+  EXIST_NAME: ' already exist userName',
+  NO_EXIST_NAME: ' is not exist userName',
+  LOGIN: 'logined',
+  INCORRECT_PASSWORD: 'incorrect password',
+};
 @Injectable()
 export class UserRepository extends Repository<User> {
   constructor(private dataSource: DataSource) {
@@ -20,7 +27,7 @@ export class UserRepository extends Repository<User> {
       userName,
     });
     if (isExistName) {
-      throw new ConflictException(`[${userName}] ${EXIST_NAME_MSG} [service]`);
+      throw new ConflictException(`[${userName}] ${MSG.EXIST_NAME} [repo]`);
     }
 
     const user = this.create(authCredentialsDto.user);
@@ -29,6 +36,20 @@ export class UserRepository extends Repository<User> {
       return await this.save(user);
     } catch (error) {
       handleDBError(userName, error);
+    }
+  }
+
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+    const { userName, password } = authCredentialsDto.user;
+    const user = await this.findOne({ where: { userName: userName } });
+    if (!user)
+      throw new ConflictException(`[${userName}] ${MSG.NO_EXIST_NAME} [repo]`);
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (isCorrectPassword) {
+      return MSG.LOGIN;
+    } else {
+      throw new UnauthorizedException(MSG.INCORRECT_PASSWORD);
     }
   }
 }
@@ -41,7 +62,7 @@ function handleDBError(userName: string, error: unknown): never {
 
     switch (err.driverError?.code) {
       case '23505':
-        throw new ConflictException(`[${userName}] ${EXIST_NAME_MSG} [db]`);
+        throw new ConflictException(`[${userName}] ${MSG.EXIST_NAME} [db]`);
     }
   }
 
