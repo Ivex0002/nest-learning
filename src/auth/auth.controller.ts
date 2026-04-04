@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   ValidationPipe,
-  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -16,6 +15,8 @@ import {
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { GetUser } from './get-user.deco';
+import { UserResponseDto } from './dto/user-res.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -49,7 +50,7 @@ export class AuthController {
   @Post('/test')
   @ApiOperation({ summary: '테스트' })
   @UseGuards(AuthGuard())
-  test(@Req() req) {
-    console.log(req);
+  test(@GetUser() user: UserResponseDto) {
+    console.log(user);
   }
 }
