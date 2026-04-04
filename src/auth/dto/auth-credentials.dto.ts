@@ -1,4 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
@@ -18,9 +19,11 @@ function IsStandardString(min: number = 4, max: number = 20) {
   );
 }
 export class UserPayload {
+  @ApiProperty()
   @IsStandardString()
   userName: string;
 
+  @ApiProperty()
   @IsStandardString()
   // 정규식 : 영어랑 숫자만
   @Matches(/^[a-zA-Z0-9]*$/, {
@@ -30,6 +33,7 @@ export class UserPayload {
 }
 
 export class AuthCredentialsDto {
+  @ApiProperty({ type: UserPayload })
   @ValidateNested()
   @Type(() => UserPayload)
   user: UserPayload;

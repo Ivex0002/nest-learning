@@ -12,7 +12,7 @@ import * as bcrypt from 'bcryptjs';
 const MSG = {
   EXIST_NAME: ' already exist userName',
   NO_EXIST_NAME: ' is not exist userName',
-  LOGIN: 'logined',
+  // LOGIN: 'logined',
   INCORRECT_PASSWORD: 'incorrect password',
 };
 @Injectable()
@@ -39,7 +39,7 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<string> {
+  async signIn(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     const { userName, password } = authCredentialsDto.user;
     const user = await this.findOne({ where: { userName: userName } });
     if (!user)
@@ -47,7 +47,7 @@ export class UserRepository extends Repository<User> {
     const isCorrectPassword = await bcrypt.compare(password, user.password);
 
     if (isCorrectPassword) {
-      return MSG.LOGIN;
+      return user;
     } else {
       throw new UnauthorizedException(MSG.INCORRECT_PASSWORD);
     }
