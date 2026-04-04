@@ -16,6 +16,8 @@ import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { ClgCheckPipe } from './pipe/clg-check.pipe';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user.deco';
+import { UserResponseDto } from 'src/auth/dto/user-res.dto';
 
 @Controller('board')
 @UseGuards(AuthGuard())
@@ -23,8 +25,8 @@ export class BoardController {
   constructor(private boardService: BoardService) {}
 
   @Get('/')
-  getAllBoards(): Promise<Board[]> {
-    return this.boardService.getAllBoards();
+  getAllBoards(@GetUser() user: UserResponseDto): Promise<Board[]> {
+    return this.boardService.getAllBoards(user);
   }
 
   @Get('/:id')
@@ -41,8 +43,9 @@ export class BoardController {
   @Post('/')
   createBoard(
     @Body(new ValidationPipe({ transform: true })) newBoardReq: CreateBoardDto,
+    @GetUser() user: UserResponseDto,
   ): Promise<Board> {
-    return this.boardService.createBoard(newBoardReq);
+    return this.boardService.createBoard(newBoardReq, user);
   }
 
   /**

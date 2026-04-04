@@ -8,6 +8,7 @@ import { DataSource, QueryFailedError, Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import * as bcrypt from 'bcryptjs';
+import { UserResponseDto } from './dto/user-res.dto';
 
 const MSG = {
   EXIST_NAME: ' already exist userName',
@@ -21,7 +22,9 @@ export class UserRepository extends Repository<User> {
     super(User, dataSource.createEntityManager());
   }
 
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  async createUser(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<UserResponseDto> {
     const userName = authCredentialsDto.user.userName;
     const isExistName = await this.findOneBy({
       userName,
@@ -31,9 +34,10 @@ export class UserRepository extends Repository<User> {
     }
 
     const user = this.create(authCredentialsDto.user);
+    const result = await this.save(user);
 
     try {
-      return await this.save(user);
+      return new UserResponseDto(result);
     } catch (error) {
       handleDBError(userName, error);
     }
@@ -41,7 +45,11 @@ export class UserRepository extends Repository<User> {
 
   async signIn(authCredentialsDto: AuthCredentialsDto): Promise<User> {
     const { userName, password } = authCredentialsDto.user;
-    const user = await this.findOne({ where: { userName: userName } });
+    const user = await this.createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.userName = :userName', { userName })
+      .getOne();
+
     if (!user)
       throw new ConflictException(`[${userName}] ${MSG.NO_EXIST_NAME} [repo]`);
     const isCorrectPassword = await bcrypt.compare(password, user.password);

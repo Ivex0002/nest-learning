@@ -4,6 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
+import { UserResponseDto } from 'src/auth/dto/user-res.dto';
 
 // @EntityRepository
 // export class BoardRepository extends Repository {
@@ -20,8 +21,20 @@ export class BoardRepository extends Repository<Board> {
     super(Board, dataSource.createEntityManager());
   }
 
-  async getAllBoards(): Promise<Board[]> {
-    return await this.find();
+  async getAllBoards(user: UserResponseDto): Promise<Board[]> {
+    // 강의에서 쓴 쿼리 빌더 예시를 현 프로젝트에 맞게 수정한 버전
+    // const query = this.createQueryBuilder('board');
+    // const result = await query
+    //   .leftJoinAndSelect('board.user', 'user')
+    //   .where('user.id = :userId', { userId: user.id })
+    //   .getMany();
+    // const boards = result.map((el) => new BoardResponseDto(el));
+    // console.log(boards);
+
+    return await this.find({
+      where: { user: { id: user.id } },
+      relations: ['user'],
+    });
   }
 
   async getBoardById(id: number): Promise<Board> {
@@ -32,8 +45,11 @@ export class BoardRepository extends Repository<Board> {
     return found;
   }
 
-  async createBoard(newBoardReq: CreateBoardDto): Promise<Board> {
-    const board = this.create(newBoardReq.board);
+  async createBoard(
+    newBoardReq: CreateBoardDto,
+    user: UserResponseDto,
+  ): Promise<Board> {
+    const board = this.create({ ...newBoardReq.board, user: user });
     return await this.save(board);
   }
 

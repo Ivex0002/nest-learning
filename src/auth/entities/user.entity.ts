@@ -4,10 +4,12 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Board } from 'src/board/entity/board.entity';
 
 @Entity()
 @Unique(['userName'])
@@ -18,9 +20,11 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
-  @Column()
-  // @Column({ select: false })
+  @Column({ select: false })
   password: string;
+
+  @OneToMany(() => Board, (board) => board.user, { eager: false })
+  boards: Board[];
 
   @BeforeInsert()
   @BeforeUpdate()

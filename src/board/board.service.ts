@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './board.repository';
+import { UserResponseDto } from 'src/auth/dto/user-res.dto';
 
 // TODO
 // 단일 데이터베이스, 다중 서비스 상황에 대응하기 위해
@@ -19,8 +20,8 @@ export class BoardService {
     private boardRepository: BoardRepository,
   ) {}
 
-  async getAllBoards(): Promise<Board[]> {
-    return await this.boardRepository.getAllBoards();
+  async getAllBoards(user: UserResponseDto): Promise<Board[]> {
+    return await this.boardRepository.getAllBoards(user);
   }
 
   async getBoardById(id: number): Promise<Board> {
@@ -33,8 +34,11 @@ export class BoardService {
    * - 타입의 정규화 및 변환 작업을 위해 create를 사용
    * - save 메서드를 통해 최종적으로 db에 저장
    */
-  async createBoard(newBoardReq: CreateBoardDto): Promise<Board> {
-    return await this.boardRepository.createBoard(newBoardReq);
+  async createBoard(
+    newBoardReq: CreateBoardDto,
+    user: UserResponseDto,
+  ): Promise<Board> {
+    return await this.boardRepository.createBoard(newBoardReq, user);
   }
 
   /**
