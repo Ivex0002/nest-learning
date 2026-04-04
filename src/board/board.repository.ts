@@ -2,7 +2,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Board } from './board.entity';
+import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 
 // @EntityRepository

@@ -1,7 +1,7 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BoardStatus } from '../board.entity';
+import { BoardStatus } from '../entity/board.entity';
 
 class BoardPayload {
   @IsNotEmpty()

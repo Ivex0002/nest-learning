@@ -12,7 +12,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
-import { Board } from './board.entity';
+import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { ClgCheckPipe } from './pipe/clg-check.pipe';
 import { AuthGuard } from '@nestjs/passport';

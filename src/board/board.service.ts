@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 // board.model 에서 board.entity 으로 변경
 // 해당 서비스에서는 board.entity만으로 구현하는 것이 간편
-import { Board } from './board.entity';
+import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './board.repository';
 
