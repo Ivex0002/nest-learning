@@ -6,9 +6,15 @@ import { User } from './entities/user.entity';
 import { UserRepository } from './user.repository';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { AUTH_CONFIG } from './auth.config';
 import { JWTStrategy } from './jwt.strategy';
+import config from 'config';
 
+export interface JwtConfig {
+  secret: string;
+  expiresIn: number;
+}
+
+const jwtConfig = config.get<JwtConfig>('jwt');
 @Module({
   imports: [
     // 강의에서는 forFeature에 레파지토리를 직접 입력했으나, 이는 TypeORM 0.2 이하 에서 사용되던 방법임
@@ -16,8 +22,10 @@ import { JWTStrategy } from './jwt.strategy';
     TypeOrmModule.forFeature([User]),
     // 인증용 jwt 모듈
     JwtModule.register({
-      secret: AUTH_CONFIG.secret,
-      signOptions: { expiresIn: AUTH_CONFIG.expiresIn },
+      secret: process.env.JWT_SECRET || jwtConfig.secret,
+      signOptions: {
+        expiresIn: Number(process.env.JWT_EXPIRE_IN) || jwtConfig.expiresIn,
+      },
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
