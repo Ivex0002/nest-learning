@@ -57,6 +57,9 @@ export class BoardController {
     @Body(new ValidationPipe({ transform: true })) newBoardReq: CreateBoardDto,
     @GetUser() user: UserResponseDto,
   ): Promise<Board> {
+    this.logger.verbose(
+      `user [ ${user.userName} ] create board payload : [ ${JSON.stringify(newBoardReq)} ]`,
+    );
     return this.boardService.createBoard(newBoardReq, user);
   }
 
@@ -89,6 +92,9 @@ export class BoardController {
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: UserResponseDto,
   ): Promise<string> {
+    this.logger.verbose(
+      `user [ ${user.userName} ] del board with id [ ${id} ]`,
+    );
     return this.boardService.deleteBoardById(id, user);
   }
 }
