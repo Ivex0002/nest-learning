@@ -50,7 +50,10 @@ export class BoardService {
    *
    * 각 속성값 빈 문자열일때 에러 반환(BoardValidate)
    *
-   * 바디에 없는 속성일시 검증 스킵(Partial, {skipMissingProperties: true,})
+   * 바디에 없는 속성일시 검증 스킵
+   *
+   * - UpdateBoardDto 타입 : PartialType(BoardPayload)
+   * - 컨트롤러 : {skipMissingProperties: true}
    *
    * 기입된 속성들이 유효한 값일때만 머징 후 반환
    */
