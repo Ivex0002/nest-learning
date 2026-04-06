@@ -8,6 +8,7 @@ import { DataSource, Repository } from 'typeorm';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { UserResponseDto } from '../auth/dto/user-res.dto';
+import { BoardResponseDto } from './dto/get-board.dto';
 
 // @EntityRepository
 // export class BoardRepository extends Repository {
@@ -46,12 +47,12 @@ export class BoardRepository extends Repository<Board> {
     });
   }
 
-  async getBoardById(id: number): Promise<Board> {
+  async getBoardById(id: number): Promise<BoardResponseDto> {
     const found = await this.findOne({ where: { id }, relations: ['user'] });
     if (!found) {
       throw new NotFoundException(`Board with ID [ ${id} ] not found`);
     }
-    return found;
+    return new BoardResponseDto(found);
   }
 
   async createBoard(

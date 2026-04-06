@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Logger,
   Param,
   ParseIntPipe,
   Patch,
@@ -18,10 +19,12 @@ import { ClgCheckPipe } from './pipe/clg-check.pipe';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from '../auth/get-user.deco';
 import { UserResponseDto } from '../auth/dto/user-res.dto';
+import { BoardResponseDto } from './dto/get-board.dto';
 
 @Controller('board')
 @UseGuards(AuthGuard())
 export class BoardController {
+  private logger = new Logger('BoardController');
   constructor(private boardService: BoardService) {}
 
   @Get('/')
@@ -37,8 +40,12 @@ export class BoardController {
   @Get('/:id')
   // 체킹용 커스텀 파이프
   @UsePipes(ClgCheckPipe)
-  getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
-    return this.boardService.getBoardById(id);
+  async getBoardById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<BoardResponseDto> {
+    const found = await this.boardService.getBoardById(id);
+    this.logger.log(found);
+    return found;
   }
 
   /**

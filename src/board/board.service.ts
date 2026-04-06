@@ -5,6 +5,7 @@ import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './board.repository';
 import { UserResponseDto } from '../auth/dto/user-res.dto';
+import { BoardResponseDto } from './dto/get-board.dto';
 
 // TODO
 // 단일 데이터베이스, 다중 서비스 상황에 대응하기 위해
@@ -28,7 +29,7 @@ export class BoardService {
     return await this.boardRepository.getAllUserBoards(user);
   }
 
-  async getBoardById(id: number): Promise<Board> {
+  async getBoardById(id: number): Promise<BoardResponseDto> {
     return await this.boardRepository.getBoardById(id);
   }
 
