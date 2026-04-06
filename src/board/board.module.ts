@@ -4,7 +4,7 @@ import { BoardService } from './board.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from './entity/board.entity';
 import { BoardRepository } from './board.repository';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   // 엔티티 등록

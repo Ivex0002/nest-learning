@@ -1,4 +1,4 @@
-import { UserResponseDto } from 'src/auth/dto/user-res.dto';
+import { UserResponseDto } from '../../auth/dto/user-res.dto';
 import { Board } from '../entity/board.entity';
 
 // 보드 레포의 주석처리된 쿼리 빌더용 dto

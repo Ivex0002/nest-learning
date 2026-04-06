@@ -9,7 +9,7 @@ import {
   Unique,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Board } from 'src/board/entity/board.entity';
+import { Board } from '../../board/entity/board.entity';
 
 @Entity()
 @Unique(['userName'])

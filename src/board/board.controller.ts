@@ -16,8 +16,8 @@ import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { ClgCheckPipe } from './pipe/clg-check.pipe';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.deco';
-import { UserResponseDto } from 'src/auth/dto/user-res.dto';
+import { GetUser } from '../auth/get-user.deco';
+import { UserResponseDto } from '../auth/dto/user-res.dto';
 
 @Controller('board')
 @UseGuards(AuthGuard())

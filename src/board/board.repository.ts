@@ -1,10 +1,8 @@
-// import { EntityRepository, Repository } from "typeorm";
-
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
-import { UserResponseDto } from 'src/auth/dto/user-res.dto';
+import { UserResponseDto } from '../auth/dto/user-res.dto';
 
 // @EntityRepository
 // export class BoardRepository extends Repository {

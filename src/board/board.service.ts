@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './board.repository';
-import { UserResponseDto } from 'src/auth/dto/user-res.dto';
+import { UserResponseDto } from '../auth/dto/user-res.dto';
 
 // TODO
 // 단일 데이터베이스, 다중 서비스 상황에 대응하기 위해
