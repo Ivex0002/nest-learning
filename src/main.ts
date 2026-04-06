@@ -13,13 +13,15 @@ const config = new DocumentBuilder()
   .build();
 
 async function bootstrap() {
+  const logger = new Logger('main');
   const app = await NestFactory.create(AppModule);
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  logger.log(`process.env.PORT : ${process.env.PORT}`);
   const port = process.env.PORT ?? DEFAULT_PORT;
   await app.listen(port);
-  Logger.log(`app running on port ${port}`);
+  logger.log(`app running on port ${port}`);
 }
 
 bootstrap().catch(console.error);
