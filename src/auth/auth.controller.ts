@@ -4,6 +4,7 @@ import {
   Body,
   ValidationPipe,
   UseGuards,
+  Get,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
@@ -47,9 +48,16 @@ export class AuthController {
     return this.authService.signIn(authCredentialsDto);
   }
 
-  @Post('/test')
-  @ApiOperation({ summary: '테스트' })
+  @Get('whoami')
   @UseGuards(AuthGuard())
+  @ApiOperation({ summary: '현재 유저' })
+  whoAmI(@GetUser() user: UserResponseDto) {
+    return this.authService.whoAmI(user);
+  }
+
+  @Post('/test')
+  @UseGuards(AuthGuard())
+  @ApiOperation({ summary: '테스트' })
   test(@GetUser() user: UserResponseDto) {
     console.log(user);
   }

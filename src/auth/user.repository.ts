@@ -15,6 +15,7 @@ const MSG = {
   NO_EXIST_NAME: ' is not exist userName',
   // LOGIN: 'logined',
   INCORRECT_PASSWORD: 'incorrect password',
+  NOT_LOGIN: 'not logined',
 };
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -59,6 +60,18 @@ export class UserRepository extends Repository<User> {
     } else {
       throw new UnauthorizedException(MSG.INCORRECT_PASSWORD);
     }
+  }
+
+  async whoAmI(user: UserResponseDto): Promise<UserResponseDto> {
+    if (!user) throw new UnauthorizedException(MSG.NOT_LOGIN);
+    const found = await this.findOne({ where: { id: user.id } });
+
+    if (!found)
+      throw new ConflictException(
+        `[${user.userName}] ${MSG.NO_EXIST_NAME} [repo]`,
+      );
+
+    return new UserResponseDto(found);
   }
 }
 

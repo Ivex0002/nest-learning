@@ -20,6 +20,7 @@ export class User extends BaseEntity {
   @Column()
   userName: string;
 
+  // select: false 설정으로 의도치 않게 패스워드 노출 x
   @Column({ select: false })
   password: string;
 

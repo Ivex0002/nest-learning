@@ -34,4 +34,8 @@ export class AuthService {
 
     return res;
   }
+
+  async whoAmI(user: UserResponseDto): Promise<UserResponseDto> {
+    return await this.userRepository.whoAmI(user);
+  }
 }

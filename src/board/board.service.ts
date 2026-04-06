@@ -61,7 +61,7 @@ export class BoardService {
     return await this.boardRepository.updateBoardById(id, updateBoardPayload);
   }
 
-  async deleteBoardById(id: number): Promise<string> {
-    return await this.boardRepository.deleteBoardById(id);
+  async deleteBoardById(id: number, user: UserResponseDto): Promise<string> {
+    return await this.boardRepository.deleteBoardById(id, user);
   }
 }

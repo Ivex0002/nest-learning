@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Board } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
@@ -66,12 +71,24 @@ export class BoardRepository extends Repository<Board> {
     return await this.save(board);
   }
 
-  async deleteBoardById(id: number): Promise<string> {
+  async deleteBoardById(id: number, user: UserResponseDto): Promise<string> {
+    const found = await this.getBoardById(id);
+
+    if (!found)
+      throw new NotFoundException(`Board with ID [ ${id} ] is not found`);
+
+    if (found.user.id !== user.id)
+      throw new UnauthorizedException(
+        `no del permission to access board with ID [ ${id} ]`,
+      );
+
     const result = await this.delete(id);
-    console.log({ result });
-    if (result.affected === 0) {
-      throw new NotFoundException(`Board with ID [ ${id} ] not found`);
-    }
+
+    if (result.affected === 0)
+      throw new ConflictException(
+        `Board with ID [ ${id} ] is not deleted [db]`,
+      );
+
     return `Board with ID [ ${id} ] is deleted`;
   }
 
