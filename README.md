@@ -373,7 +373,7 @@ async hashPassword() {
 - `PUBLIC`: 모두 볼 수 있음
 - `PRIVATE`: 작성자만 볼 수 있음
   - {{base_url}}/board/myboard : GET 을 통해 로그인 중인 사용자의 모든 게시물을 볼 수 있습니다.
-  - {{base_url}}/board : GET 을 통해 PUBLIC 상태인 모든 게시물을 볼 수 있습니다.
+  - {{base_url}}/board : GET 을 통해 PUBLIC 상태인 모든 게시물을 볼 수 있습니다. PRIVATE 상태인 게시물은 제외 됩니다.
 
 #### 게시물 수정
 
@@ -390,26 +390,26 @@ async hashPassword() {
 
 ```bash
 # ESLint 실행 (자동 수정)
-npm run lint
+pnpm run lint
 
 # Prettier 포맷팅
-npm run format
+pnpm run format
 ```
 
 ### 테스트 실행
 
 ```bash
 # 단위 테스트
-npm run test
+pnpm run test
 
 # 테스트 watch 모드
-npm run test:watch
+pnpm run test:watch
 
 # 커버리지 리포트
-npm run test:cov
+pnpm run test:cov
 
 # E2E 테스트
-npm run test:e2e
+pnpm run test:e2e
 ```
 
 ---
@@ -482,31 +482,8 @@ server:
 프로덕션 환경에서는 수동 마이그레이션이 필요합니다:
 
 ```bash
-npm run typeorm migration:generate
-npm run typeorm migration:run
+pnpm run typeorm migration:generate
+pnpm run typeorm migration:run
 ```
 
 ---
-
-## 기여하기
-
-1. Feature 브랜치 생성 (`git checkout -b feature/AmazingFeature`)
-2. 변경사항 커밋 (`git commit -m 'Add AmazingFeature'`)
-3. 브랜치에 푸시 (`git push origin feature/AmazingFeature`)
-4. Pull Request 생성
-
----
-
-## 라이선스
-
-UNLICENSED
-
----
-
-## 문의
-
-프로젝트 관련 질문이나 버그 리포트는 이슈를 등록해주세요.
-
----
-
-**마지막 업데이트**: 2025년 11월
