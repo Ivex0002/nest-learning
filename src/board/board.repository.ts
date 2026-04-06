@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Board } from './entity/board.entity';
+import { Board, BoardStatus } from './entity/board.entity';
 import { CreateBoardDto, UpdateBoardDto } from './dto/create-board.dto';
 import { UserResponseDto } from '../auth/dto/user-res.dto';
 import { BoardResponseDto } from './dto/get-board.dto';
@@ -27,6 +27,7 @@ export class BoardRepository extends Repository<Board> {
 
   async getAllBoards(): Promise<Board[]> {
     return await this.find({
+      where: { status: BoardStatus.PUBLIC },
       relations: ['user'],
     });
   }
