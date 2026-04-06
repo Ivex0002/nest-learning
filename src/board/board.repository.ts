@@ -19,7 +19,13 @@ export class BoardRepository extends Repository<Board> {
     super(Board, dataSource.createEntityManager());
   }
 
-  async getAllBoards(user: UserResponseDto): Promise<Board[]> {
+  async getAllBoards(): Promise<Board[]> {
+    return await this.find({
+      relations: ['user'],
+    });
+  }
+
+  async getAllUserBoards(user: UserResponseDto): Promise<Board[]> {
     // 강의에서 쓴 쿼리 빌더 예시를 현 프로젝트에 맞게 수정한 버전
     // const query = this.createQueryBuilder('board');
     // const result = await query
@@ -36,7 +42,7 @@ export class BoardRepository extends Repository<Board> {
   }
 
   async getBoardById(id: number): Promise<Board> {
-    const found = await this.findOne({ where: { id } });
+    const found = await this.findOne({ where: { id }, relations: ['user'] });
     if (!found) {
       throw new NotFoundException(`Board with ID [ ${id} ] not found`);
     }

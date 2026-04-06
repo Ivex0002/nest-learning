@@ -20,8 +20,12 @@ export class BoardService {
     private boardRepository: BoardRepository,
   ) {}
 
-  async getAllBoards(user: UserResponseDto): Promise<Board[]> {
-    return await this.boardRepository.getAllBoards(user);
+  async getAllBoards(): Promise<Board[]> {
+    return await this.boardRepository.getAllBoards();
+  }
+
+  async getAllUserBoards(user: UserResponseDto): Promise<Board[]> {
+    return await this.boardRepository.getAllUserBoards(user);
   }
 
   async getBoardById(id: number): Promise<Board> {
