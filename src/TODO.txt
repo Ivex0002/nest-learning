@@ -1,0 +1,4 @@
+1. dto : Entity에 의존하지 않게 변경
+
+2. Mapper 생성 : dto <-> entity 중간 계층(parser)
+    - 현재는 dto가 mapper 의 역할도 겸하고 있음
